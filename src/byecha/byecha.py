@@ -12,6 +12,7 @@ def main():
     ap = ArgumentParser()
     ap.add_argument('id', help='your chatwork id')
     ap.add_argument('-p', '--password', help='your chatwork password')
+    ap.add_argument('-o', '--output', help='output path')
 
     args = ap.parse_args()
     user_id = args.id
@@ -20,11 +21,12 @@ def main():
     else:
         password = getpass('Password for ' + args.id + ': ')
 
-    OUT_PATH = '_out'
-    if not os.path.exists(OUT_PATH):
-        os.makedirs(OUT_PATH)
+    DEFAULT_OUT_PATH = '_out'
+    out_dir = args.output if args.output else DEFAULT_OUT_PATH
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
 
-    bc = ByeCha(user_id=user_id, password=password, out_dir=OUT_PATH)
+    bc = ByeCha(user_id=user_id, password=password, out_dir=out_dir)
     bc.login()
 
     for room in bc.rooms:

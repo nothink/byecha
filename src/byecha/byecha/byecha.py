@@ -4,13 +4,15 @@ from .room import Room, RoomType
 from .account import Account
 
 import os
-import requests
 import re
 import json
 import time
 import random
 import base64
 import urllib.parse
+
+import requests
+from requests.exceptions import ConnectionError, ReadTimeout
 
 BASE_URL = 'https://www.chatwork.com'
 LOGIN_URL = BASE_URL + '/login.php'
@@ -19,10 +21,13 @@ GATEWAY_URL = BASE_URL + '/gateway.php'
 MAX_RETRY_CNT = 5
 CHAT_SIZE = 40
 INTERVAL_ORDER = 1.0
+LONG_INTERVAL_ORDER = 30.0 * 60
 
 
 class ByeCha(object):
-    ''' Chatworks log dumper '''
+    '''
+    Chatworks log dumper
+    '''
     def __init__(self, user_id, password, out_dir='_out'):
         ''' initializer '''
         self.user_id = user_id
@@ -57,6 +62,9 @@ class ByeCha(object):
         self._init_load()
 
     def get_all_chat(self, room_id):
+        '''
+        get all chats, and dump in files, and download attached files in a room
+        '''
         # TODO really need to return all chat's list?
         first_id = 0
         chat_list = []
@@ -85,10 +93,14 @@ class ByeCha(object):
         return chat_list
 
     def fetch_files(self, chat_list):
+        '''
+        fetch files in list of chat
+        '''
         for chat in chat_list:
             file_id_all = re.findall(r"\[download\:([^\]]+)\]", chat['msg'])
             for file_id in file_id_all:
                 self._download_file(file_id)
+                self._wait_interval()
 
     def _init_load(self):
         '''
@@ -142,17 +154,17 @@ class ByeCha(object):
                                        '&desc=1',
                                        timeout=(5, 1000))
                 break
-            except ConnectionError as ce:
+            except (ConnectionError, ReadTimeout) as e:
+                print('raised: ' + e.__class__.__name__ + ' , cnt:' + str(cnt))
                 # count up
                 cnt += 1
                 if cnt >= MAX_RETRY_CNT:
                     # TODO logging retry over
-                    raise ce
+                    print('wait for forgived')
+                    self._wait_till_forgived()
+                    cnt = 0
                 else:
                     self._wait_interval()
-            except TimeoutError as te:
-                # TODO logging timeouts
-                raise te
 
         status = res.json()['status']['success']
         if not status:
@@ -176,17 +188,18 @@ class ByeCha(object):
                                        '&file_id=' + str(file_id),
                                        timeout=(5, 10))
                 break
-            except ConnectionError as ce:
+            except (ConnectionError, ReadTimeout) as e:
+                print('raised: ' + e.__class__.__name__ + ' , cnt:' + str(cnt))
                 # count up
                 cnt += 1
                 if cnt >= MAX_RETRY_CNT:
                     # TODO logging retry over
-                    raise ce
+                    print('wait for forgived')
+                    self._wait_till_forgived()
+                    cnt = 0
                 else:
                     self._wait_interval()
-            except TimeoutError as te:
-                # TODO logging timeouts
-                raise te
+
         condis = res.headers['Content-disposition']
         filename_all = re.findall(r"attachment;filename\*=UTF-8''(.+)",
                                   condis)
@@ -235,4 +248,9 @@ class ByeCha(object):
         return self._contacts
 
     def _wait_interval(self):
+        ''' wait a little (a few seconds, and so on) '''
         time.sleep(INTERVAL_ORDER * random.uniform(1.0, 4.0))
+
+    def _wait_till_forgived(self):
+        ''' wait long (some minites or an hour, and so on) '''
+        time.sleep(LONG_INTERVAL_ORDER * random.uniform(1.0, 2.0))
