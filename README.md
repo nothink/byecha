@@ -1,3 +1,8 @@
 # ByeCha
 
-ByeCha is a dumping Chatwork log tool written by Python3.
+ByeCha is a log dumper of Chatwork (Chatwork.com), written by Python 3,
+inspired by [goodbye_chatwork](https://github.com/swdyh/goodbye_chatwork).
+
+# Installation
+
+# Usage
