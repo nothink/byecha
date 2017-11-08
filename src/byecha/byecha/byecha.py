@@ -18,6 +18,8 @@ BASE_URL = 'https://www.chatwork.com'
 LOGIN_URL = BASE_URL + '/login.php'
 GATEWAY_URL = BASE_URL + '/gateway.php'
 
+AVATAR_BASE_URL = 'https://appdata.chatwork.com/avatar/'
+
 MAX_RETRY_CNT = 5
 CHAT_SIZE = 40
 INTERVAL_ORDER = 1.0
