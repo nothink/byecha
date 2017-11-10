@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
+from .basemodel import BaseModel
+
 from enum import Enum
 
 
@@ -10,44 +12,43 @@ class RoomType(Enum):
     GROUP = 3
 
 
-class Room(object):
+class Room(BaseModel):
     ''' room of ChatWork '''
-    def __init__(self, myid, room_id, dic):
-        ''' initializer '''
-        self.room_id = room_id
+    # TODO Obsolete!
 
-        # save all key's values temporary
+    _room_list = None
+
+    def __init__(self, dic, room_id, myid):
+        ''' initializer '''
         # MY:
         #       c, f, lt, m, mid, mt, mute, r, s, t, tp
         # Direct:
         #       c, f, lt, m, mid, mute, r, t, tp
         # Group:
         #       c, f, ic, ln, lt, m, mid, mr, mute, n, p, r, t, tp,
-        self.c = dic.get('c', None)
-        self.f = dic.get('f', None)
-        self.ic = dic.get('ic', None)   # icon path
-        self.ln = dic.get('ln', None)
-        self.lt = dic.get('lt', None)
-        self.m = dic.get('m', {})
-        self.mid = dic.get('mid', None)
-        self.mr = dic.get('mr', [])
-        self.mt = dic.get('mt', None)
-        self.mute = dic.get('mute', None)  # mute flag
-        self.n = dic.get('n', None)
-        self.p = dic.get('p', None)
-        self.r = dic.get('r', None)
-        self.s = dic.get('s', None)
-        self.t = dic.get('t', None)
-        self.tp = dic.get('tp', None)
+        super().__init__(dic)
 
-        if len(self.m) == 1 and myid in self.m.keys():
-            self.room_type = RoomType.MY
-            # TODO 自分の名前入れる
-        elif len(self.m) == 2 and myid in self.m.keys():
-            self.room_type = RoomType.DIRECT
-            # TODO 相手の名前入れる
+        self.room_id = room_id
+        self.myid = myid
+
+    @property
+    def room_type(self):
+        if len(self.m) == 1 and self.myid in self.m.keys():
+            return RoomType.MY
+        elif len(self.m) == 2 and self.myid in self.m.keys():
+            return RoomType.DIRECT
         elif len(self.m) > 0 and self.n:
-            self.room_type = RoomType.GROUP
-            self.name = self.n
+            return RoomType.GROUP
         else:
-            raise AttributeError(dic)
+            raise AttributeError('Unknown room type')
+
+    @classmethod
+    def rooms(cls, json):
+        if not cls._room_list and json:
+            room_list = []
+            for room_id in self.room_dat.keys():
+                room_list.append(cls(dic=self.room_dat[room_id],
+                                     room_id=room_id,
+                                     myid=self.myid))
+            self._room_list = room_list
+        return self._room_list

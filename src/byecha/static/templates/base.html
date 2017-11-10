@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% import json %}
+{% autoescape None %}
+<html>
+<head>
+    <title>ByeCha</title>
+    <link rel="stylesheet" href="{{ static_url("css/byecha.css") }}"/>
+    <link rel="shortcut icon" id="_favicon" href="{{ static_url("images/favicon.ico") }}" type="image/vnd.microsoft.icon">
+</head>
+<body>
+    <div class="container">
+        <div class="head">
+            <h1>ByeCha</h1>
+        </div>
+        <div class="navbase">
+            <div class="nav">
+                <ul>
+{% for rid in room_list %}
+    {% block room %}
+        {% include "room.html" %}
+    {% end %}
+{% end %}
+                </ul>
+            </div>
+        </div>
+        <div class="mainbase">
+            <div class="main">
+{% block chats %}
+{% end %}
+        </div>
+        </div>
+    </div>
+</body>
+</html>

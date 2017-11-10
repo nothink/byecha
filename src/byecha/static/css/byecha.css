@@ -1,0 +1,119 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #EAEBEC;
+    font-family: "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    display: none;
+}
+
+.container{
+    margin: 0;
+    padding: 0;
+}
+ul {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+li {
+    border-color: #B6B7B8;
+    border-style: none none solid none;
+    border-width: thin;
+    clear: both;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.room {
+    display: block;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+}
+
+.roomlink {
+    background-color: #DCDDDE;
+    color: #121110;
+    display: block;
+    font-size: 12px;
+    height: 48px;
+    text-decoration: none;
+}
+
+.roomlink:hover {
+    background-color: #999999;
+}
+
+.roomlink img {
+    float: left;
+    margin: 6px;
+}
+
+.chat {
+    background-color: #EAEBEC;
+}
+
+.head {
+    background-color: #353630;
+    background-image: url("../images/byecha.png");
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: 190px 80px;
+    height: 80px;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 4;
+}
+
+.navbase {
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    overflow-y: hidden;
+    padding: 0;
+    position: fixed;
+    top: 80px;
+    width: 300px;
+    z-index: 3;
+}
+.nav {
+    height: 100%;
+    overflow-y: scroll;
+    position: relative;
+    width: 100%;
+}
+.mainbase {
+    bottom: 0;
+    left: 302px;
+    margin: 0;
+    overflow-y: hidden;
+    padding: 0;
+    position: fixed;
+    top: 82px;
+    width: auto;
+    z-index: 1;
+}
+.main {
+    background-color: #EAEBEC;
+    height: 100%;
+    overflow-y: scroll;
+    position: relative;
+    width: 100%;
+}
+
+p {
+  color:#222312;
+  font-size:100%;
+}

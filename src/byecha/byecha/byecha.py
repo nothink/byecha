@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from .room import Room, RoomType
-from .account import Account
+# from .room import Room, RoomType
 
 import os
 import re
@@ -19,6 +18,7 @@ LOGIN_URL = BASE_URL + '/login.php'
 GATEWAY_URL = BASE_URL + '/gateway.php'
 
 AVATAR_BASE_URL = 'https://appdata.chatwork.com/avatar/'
+ICON_BASE_URL = 'https://appdata.chatwork.com/icon/'
 
 MAX_RETRY_CNT = 5
 CHAT_SIZE = 40
@@ -37,9 +37,6 @@ class ByeCha(object):
         self.session = requests.session()
         self.out_dir = out_dir
         random.seed()
-
-        self._rooms = None
-        self._contacts = None
 
     def login(self):
         '''
@@ -226,28 +223,6 @@ class ByeCha(object):
         with open(fpath, 'wb') as f:
             for chunk in res.iter_content(chunk_size=128):
                 f.write(chunk)
-
-    @property
-    def rooms(self):
-        ''' get all joined rooms '''
-        if not self._rooms and self.room_dat:
-            room_list = []
-            for room_id in self.room_dat.keys():
-                room_list.append(Room(self.myid,
-                                      room_id,
-                                      self.room_dat[room_id]))
-            self._rooms = room_list
-        return self._rooms
-
-    @property
-    def contacts(self):
-        ''' get all accounts in contact '''
-        if not self._contacts and self.contact_dat:
-            contact_list = []
-            for aid in self.contact_dat.keys():
-                contact_list.append(Account(aid, self.contact_dat[aid]))
-            self._contacts = contact_list
-        return self._contacts
 
     def _wait_interval(self):
         ''' wait a little (a few seconds, and so on) '''

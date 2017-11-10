@@ -1,0 +1,11 @@
+            <li class="room">
+                <a class="roomlink" href="#">
+{% if 'n' in room_list[rid] %}
+                    <img src="https://appdata.chatwork.com/icon/{{ room_list[rid]['ic'] }}" width="36" height="36" />
+                    {{ room_list[rid]['n'] }}
+{% else %}
+                    <img src="https://appdata.chatwork.com/spacer.png" width="36" height="36" />
+                    ダイレクト
+{% end %}
+                </a>
+            </li>

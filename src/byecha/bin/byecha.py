@@ -29,8 +29,8 @@ def main():
     bc = ByeCha(user_id=user_id, password=password, out_dir=out_dir)
     bc.login()
 
-    for room in bc.rooms:
-        bc.get_all_chat(room.room_id)
+    for room_id in bc.room_dat.keys():
+        bc.get_all_chat(room_id)
 
 
 if __name__ == '__main__':

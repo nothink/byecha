@@ -12,5 +12,5 @@ pip install ByeCha
 # Usage
 
 ```
-byecha account@of.chat.works
+byecha account@of.chat.work
 ```

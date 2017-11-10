@@ -1,0 +1,10 @@
+{%extends "base.html" %}
+{% block chats %}
+        <ul>
+{% for chat in chat_list %}
+    {% block chat %}
+            <li class="chat">{{ chat['msg'].replace('\n','<br />') }}</li>
+    {% end %}
+{% end %}
+        </ul>
+{% end %}
