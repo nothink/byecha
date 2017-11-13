@@ -6,9 +6,22 @@ import json
 
 
 class WebHandler(RequestHandler):
+    '''
+    HTTP Handler Class
+    '''
+    SUPPORTED_METHODS = ("GET", "POST")
+
+    def initialize(self, storage):
+        '''
+        initializer
+        '''
+        self.storage = storage
 
     @asynchronous
     def get(self):
+        '''
+        async GET method handling method
+        '''
         chat_list = json.load(
             open('/Users/kaba/Projects/ByeCha/src/byecha/_dump/json/111250/111250_last.json'))
         room_list = json.load(

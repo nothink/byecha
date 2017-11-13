@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from .handler import WebHandler
+from .storage import ChatStorage
 
 import os
 from multiprocessing import Process
@@ -11,7 +12,15 @@ from tornado.web import Application
 
 
 class WebProcess(Process):
-    def __init__(self, port, address='0.0.0.0', proc_num=0, debug=False):
+    '''
+    HTTP server process class
+    '''
+    def __init__(self,
+                 port, address='0.0.0.0',
+                 path='./dump', proc_num=0, debug=False):
+        '''
+        initializer
+        '''
         super().__init__()
 
         self.port = port
@@ -19,10 +28,17 @@ class WebProcess(Process):
         self.proc_num = proc_num
         self.debug = debug
 
+        self.storage = ChatStorage(path)
+
     def run(self):
-        app = Application([(r"/", WebHandler), ],
-                          template_path=os.path.join(os.getcwd(),  "static/templates"),
-                          static_path=os.path.join(os.getcwd(),  "static"),
+        '''
+        run process
+        '''
+        app = Application([(r"/", WebHandler, dict(storage=self.storage)), ],
+                          template_path=os.path.join(os.getcwd(),
+                                                     "static/templates"),
+                          static_path=os.path.join(os.getcwd(),
+                                                   "static"),
                           debug=self.debug)
         server = HTTPServer(app)
 
@@ -34,4 +50,7 @@ class WebProcess(Process):
         IOLoop.instance().start()
 
     def join(self, timeout=None):
+        '''
+        join process
+        '''
         super().join(timeout)
