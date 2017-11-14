@@ -2,6 +2,7 @@
 
 from .handler import WebHandler
 from .storage import ChatStorage
+from ..const import *
 
 import os
 from multiprocessing import Process
@@ -29,16 +30,15 @@ class WebProcess(Process):
         self.debug = debug
 
         self.storage = ChatStorage(path)
+        self.root = path
 
     def run(self):
         '''
         run process
         '''
-        app = Application([(r"/", WebHandler, dict(storage=self.storage)), ],
-                          template_path=os.path.join(os.getcwd(),
-                                                     "static/templates"),
-                          static_path=os.path.join(os.getcwd(),
-                                                   "static"),
+        app = Application([(r'.*', WebHandler, dict(storage=self.storage)), ],
+                          template_path=os.path.join(self.root, TEMPLATE_PATH),
+                          static_path=self.root,
                           debug=self.debug)
         server = HTTPServer(app)
 

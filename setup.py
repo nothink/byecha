@@ -21,7 +21,7 @@ def find_scripts(scripts_path):
                            os.listdir(base_path))))
 
 
-libdir = 'src/byecha'
+libdir = 'byecha/src'
 bindir = os.path.join(libdir, 'bin')
 sys.path.insert(0, libdir)
 

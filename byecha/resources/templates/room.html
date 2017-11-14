@@ -1,11 +1,17 @@
             <li class="room">
-                <a class="roomlink" href="#">
+                <a class="{{ 'roomlink_selected' if rid == room_id else 'roomlink' }}" href="/{{ '#' if rid == room_id else rid }}/">
 {% if 'n' in room_list[rid] %}
-                    <img src="https://appdata.chatwork.com/icon/{{ room_list[rid]['ic'] }}" width="36" height="36" />
-                    {{ room_list[rid]['n'] }}
+    {% set icon = room_list[rid]['ic'] if  room_list[rid]['ic'] != 4 else 'ico_meeting.png' %}
+                    <img src="https://appdata.chatwork.com/icon/{{ icon }}" width="36" height="36" />{{ room_list[rid]['n'] }}
+{% elif len(room_list[rid]['m']) == 1 and myid in room_list[rid]['m'].keys() %}
+                    <img src="https://appdata.chatwork.com/avatar/{{ contact_list[myid]['av'] }}" width="36" height="36" />{{ contact_list[myid]['nm'] }}
+{% elif len(room_list[rid]['m']) == 2 and myid in room_list[rid]['m'].keys() %}
+    {% set mem_ids = list(room_list[rid]['m'].keys()) %}
+    {% set tmp = mem_ids.remove(myid) %}
+    {% set target_id = mem_ids[0] %}
+                    <img src="https://appdata.chatwork.com/avatar/{{ contact_list[target_id]['av'] }}" width="36" height="36" />{{ contact_list[target_id]['nm'] }}
 {% else %}
-                    <img src="https://appdata.chatwork.com/spacer.png" width="36" height="36" />
-                    ダイレクト
+                    [UNKNOWN CHAT ROOM]
 {% end %}
                 </a>
             </li>

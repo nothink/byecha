@@ -47,6 +47,8 @@ class ByeCha(object):
         if not myid_all or len(myid_all) <= 0:
             raise LookupError('MYID')
         self.myid = myid_all[0]
+        with open(os.path.join(self.root, MYID_FILE), 'w') as f:
+            f.write(self.myid)
 
         # initialize
         self._init_load()
@@ -175,6 +177,10 @@ class ByeCha(object):
         }
         res = self._get_from_gateway(param)
 
+        if 'Content-disposition' not in res.headers:
+            # TODO must logging!
+            print('None Content-disposition headers: ' + str(file_id))
+            return
         filename = _dig_up_filename(res.headers['Content-disposition'])
 
         output_dir = os.path.join(self.root, 'file', str(file_id))

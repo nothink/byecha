@@ -2,7 +2,7 @@
 
 from tornado.web import RequestHandler, asynchronous
 
-import json
+from urllib.parse import urlparse
 
 
 class WebHandler(RequestHandler):
@@ -22,15 +22,17 @@ class WebHandler(RequestHandler):
         '''
         async GET method handling method
         '''
-        chat_list = json.load(
-            open('/Users/kaba/Projects/ByeCha/src/byecha/_dump/json/111250/111250_last.json'))
-        room_list = json.load(
-            open('/Users/kaba/Projects/ByeCha/src/byecha/_dump/json/room_dat.json'))
-        contact_list = json.load(
-            open('/Users/kaba/Projects/ByeCha/src/byecha/_dump/json/contact_dat.json'))
+        uri = urlparse(self.request.uri)
+        dirs = uri.path.split("/")
+        room_id = dirs[1] if len(dirs) > 1 else None
+        offset = dirs[2] if len(dirs) > 2 else None
+
         self.render("index.html",
-                    chat_list=chat_list,
-                    room_list=room_list,
-                    contact_list=contact_list)
+                    myid=self.storage.myid,
+                    room_id=room_id,
+                    offset=offset,
+                    chat_list=self.storage.get_chat_list(room_id, offset),
+                    room_list=self.storage.room_list,
+                    contact_list=self.storage.contact_list)
 
     post = get

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% import json %}
-{% autoescape None %}
 <html>
 <head>
     <title>ByeCha</title>
@@ -14,6 +13,7 @@
         </div>
         <div class="navbase">
             <div class="nav">
+                <h2>チャット一覧</h2>
                 <ul>
 {% for rid in room_list %}
     {% block room %}
@@ -25,9 +25,9 @@
         </div>
         <div class="mainbase">
             <div class="main">
-{% block chats %}
+{% block main %}
 {% end %}
-        </div>
+            </div>
         </div>
     </div>
 </body>
