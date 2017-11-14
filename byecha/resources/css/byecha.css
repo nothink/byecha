@@ -146,16 +146,15 @@ li {
 }
 
 .main {
-    display: block;
-    height: 100%;
-    margin-left: 300px;
-    margin-top: 85px;
-    overflow-y: scroll;
-    position: relative;
-    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    padding-left: 300px;
+    padding-top: 85px;
     z-index: 2;
 }
 
 p {
+  display: block;
   font-size:100%;
+  overflow: auto;
 }

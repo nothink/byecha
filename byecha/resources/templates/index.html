@@ -19,13 +19,19 @@
             [UNKNOWN CHAT ROOM]
     {% end %}
         </h2>
-        <ul>
+
+    {% set aid_pre = None %}
     {% for chat in chat_list %}
+        {% if chat['aid'] != aid_pre %}
+            {% set aid_pre = chat['aid'] %}
+            <h3>{{ chat['aid'] }}</h3>
+        {% end %}
+
         {% block chat %}
             {% include "chat.html" %}
         {% end %}
     {% end %}
-        </ul>
+
 {% end %}
 
 {% end %}
