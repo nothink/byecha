@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% import json %}
 <html>
 <head>
     <title>ByeCha</title>
@@ -11,22 +10,41 @@
         <div class="head">
             <h1>ByeCha</h1>
         </div>
-        <div class="navbase">
-            <div class="nav">
+        <div class="flexbox">
+            <div class="navbase">
                 <h2>チャット一覧</h2>
-                <ul>
+                <div class="nav">
+                    <ul>
 {% for rid in room_list %}
     {% block room %}
         {% include "room.html" %}
     {% end %}
 {% end %}
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="mainbase">
-            <div class="main">
+            <div class="mainbase">
+{% if room_id in room_list %}
+                <h3>
+    {% if 'n' in room_list[room_id] %}
+                    {{ room_list[room_id]['n'] }}
+    {% elif len(room_list[room_id]['m']) == 1 and myid in room_list[room_id]['m'].keys() %}
+                    {{ contact_list[myid]['nm'] }}
+    {% elif len(room_list[room_id]['m']) == 2 and myid in room_list[room_id]['m'].keys() %}
+        {% set mem_ids = list(room_list[room_id]['m'].keys()) %}
+        {% set tmp = mem_ids.remove(myid) %}
+        {% set target_id = mem_ids[0] %}
+                    {{ contact_list[target_id]['nm'] }}
+    {% else %}
+                    [UNKNOWN CHAT ROOM]
+    {% end %}
+                </h3>
+{% end %}
+
+                <div class="main">
 {% block main %}
 {% end %}
+                </div>
             </div>
         </div>
     </div>

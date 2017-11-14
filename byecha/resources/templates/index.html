@@ -4,33 +4,45 @@
 
 {% if not room_id or not chat_list %}
 
-{% elif room_id in room_list %}
-        <h2>
-    {% if 'n' in room_list[room_id] %}
-            {{ room_list[room_id]['n'] }}
-    {% elif len(room_list[room_id]['m']) == 1 and myid in room_list[room_id]['m'].keys() %}
-            {{ contact_list[myid]['nm'] }}
-    {% elif len(room_list[room_id]['m']) == 2 and myid in room_list[room_id]['m'].keys() %}
-        {% set mem_ids = list(room_list[room_id]['m'].keys()) %}
-        {% set tmp = mem_ids.remove(myid) %}
-        {% set target_id = mem_ids[0] %}
-            {{ contact_list[target_id]['nm'] }}
-    {% else %}
-            [UNKNOWN CHAT ROOM]
-    {% end %}
-        </h2>
-
+{% else %}
     {% set aid_pre = None %}
     {% for chat in chat_list %}
         {% if chat['aid'] != aid_pre %}
+
+            {% if aid_pre and chat['aid'] != aid_pre %}
+    </div>
+</div>
+            {% end %}
+
+<div class="flexbox">
+
+            {% if str(chat['aid']) in contact_list %}
+
+
+    <div class="iconflex"><img src="https://appdata.chatwork.com/avatar/{{ contact_list[str(chat['aid'])]['av'] }}" width="36" height="36" /></div>
+    <div class="chatflex">
+        <h4>{{ contact_list[str(chat['aid'])]['nm'] }}</h4>
+
+            {% else %}
+
+    <div class="iconflex"><img src="{{ static_url("images/unknown-user.png") }}" width="36" height="36" /></div>
+    <div class="chatflex">
+        <h4>コンタクトなし(ID: {{ chat['aid'] }})</h4>
+
+            {% end %}
+
             {% set aid_pre = chat['aid'] %}
-            <h3>{{ chat['aid'] }}</h3>
         {% end %}
 
         {% block chat %}
             {% include "chat.html" %}
         {% end %}
+
     {% end %}
+
+    </div>
+</div>
+
 
 {% end %}
 
