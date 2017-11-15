@@ -1,6 +1,6 @@
 {% from byecha.web.chat import Chat %}
 {% set chat_obj = Chat(chat['msg'], contact_list) %}
 {% autoescape None %}
-                <p class="chat">
+                <div class="chat">
                     {{ chat_obj.html_string }}
-                </p>
+                </div>

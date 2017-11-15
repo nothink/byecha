@@ -1,6 +1,7 @@
 {%extends "base.html" %}
 
 {% block main %}
+{% import time %}
 
 {% if not room_id or not chat_list %}
 
@@ -25,13 +26,16 @@
 
             {% else %}
 
-    <div class="iconflex"><img src="{{ static_url("images/unknown-user.png") }}" width="36" height="36" /></div>
+    <div class="iconflex"><img src="{{ static_url("images/avatar/ico_default.png") }}" width="36" height="36" /></div>
     <div class="chatflex">
-        <h4>コンタクトなし(ID: {{ chat['aid'] }})</h4>
+        <h4>コンタクトなし (ID: {{ chat['aid'] }})</h4>
 
             {% end %}
 
             {% set aid_pre = chat['aid'] %}
+        <div class="chat_time">{{ time.strftime('%-m月%-d日 %H:%M:%S', time.localtime(int(chat['tm']))) }}</div>
+        {% else %}
+        <div class="chat_time">{{ time.strftime('%H:%M:%S', time.localtime(int(chat['tm']))) }}</div>
         {% end %}
 
         {% block chat %}

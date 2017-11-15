@@ -16,4 +16,9 @@ LONG_INTERVAL_ORDER = 30.0 * 60
 # dump path and filename settings
 ACCOUNT_CONFIG_FILE = 'conf.json'
 MYID_FILE = 'myid.txt'
+STATIC_BASE = '/static'
 TEMPLATE_PATH = './templates'
+IMAGE_PATH = './images'
+AVATAR_PATH = './images/avatar'
+
+DEFAULT_AVATAR = 'ico_default.png'
