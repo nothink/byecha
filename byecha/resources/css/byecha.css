@@ -55,6 +55,29 @@ h3 {
     top: 80px;
     width: 100%;
 }
+
+.navigator {
+    background-color: #58595A;
+    border-color: #B6B7B8;
+    border-style: none none solid solid;
+    border-width: thin;
+    color: #FFFFFF;
+    display: block;
+    font-size: 12px;
+    height: 23px;
+    margin: 0;
+    padding: 0 1em;
+    position: fixed;
+    right: 1px;
+    text-decoration: none;
+    text-indent: 0;
+    top: 80px;
+}
+.navigator>a {
+    color: #9999FF;
+    text-decoration: underline;
+}
+
 .container{
     bottom: 0;
     height: 100vh;
@@ -192,8 +215,7 @@ li {
     border-width: thin;
     display: block;
     font-size:100%;
-    line-height: 2em;
-    margin: 2px 32px 4px 2px;
+    margin: 2px 24px 4px 2px;
     padding: 0.5em 96px 1em 8px;
 }
 
@@ -305,7 +327,7 @@ blockquote>.quote {
 .info>.info_head {
     background-color: #F1F2F3;
     background-image: url("../images/info-icon.png");
-    background-position: 8px center;
+    background-position: 6px center;
     background-repeat: no-repeat;
     background-size: 20px;
     border-color: #B6B7B8;

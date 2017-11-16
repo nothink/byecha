@@ -40,6 +40,7 @@ class Chat(object):
             tmp_html = self._render_quote(tmp_html)
             tmp_html = self._render_info(tmp_html)
             tmp_html = self._render_deleted(tmp_html)
+            tmp_html = self._render_sytem_message(tmp_html)
             self._html = tmp_html
         return self._html
 
@@ -189,3 +190,44 @@ class Chat(object):
     def _render_deleted(self, src):
         return src.replace('[deleted]',
                            '<div class="deleted">メッセージは削除されました</div>')
+
+    def _render_sytem_message(self, src):
+        tmp_str = src
+        dtext_list = []
+        regex = r"\[dtext:(\w*)\]"
+        match = re.findall(regex, tmp_str)
+        for m in match:
+            dtext_key = m
+            if dtext_key in dtext_list:
+                continue
+            elif dtext_key not in DTEXT_DICT or not DTEXT_DICT[dtext_key]:
+                sys_msg = '<span style="color: red;">[不明なシステムメッセージ: '
+                sys_msg += dtext_key
+                sys_msg += ']</span>'
+            else:
+                sys_msg = DTEXT_DICT[dtext_key]
+            tmp_str = tmp_str.replace('[dtext:' + dtext_key + ']', sys_msg)
+
+            dtext_list.append(dtext_key)
+        return tmp_str
+
+    def _render_thumbnail(self, src):
+        tmp_str = src
+        pid_list = []
+        regex = r"\[preview id=(\d*) ht=(\d*)\]"
+        match = re.findall(regex, tmp_str)
+        for m in match:
+            pid = str(m[0])
+            height = str(m[1])
+            if pid in pid_list:
+                continue
+            elif dtext_key not in DTEXT_DICT or not DTEXT_DICT[dtext_key]:
+                sys_msg = '<span style="color: red;">[不明なシステムメッセージ: '
+                sys_msg += dtext_key
+                sys_msg += ']</span>'
+            else:
+                sys_msg = DTEXT_DICT[dtext_key]
+            tmp_str = tmp_str.replace('[dtext:' + dtext_key + ']', sys_msg)
+
+            pid_list.append(dtext_key)
+        return tmp_str

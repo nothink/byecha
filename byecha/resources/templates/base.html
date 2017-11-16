@@ -24,23 +24,7 @@
                 </div>
             </div>
             <div class="mainbase">
-{% if room_id in room_list %}
-                <h3>
-    {% if 'n' in room_list[room_id] %}
-                    {{ room_list[room_id]['n'] }}
-    {% elif len(room_list[room_id]['m']) == 1 and myid in room_list[room_id]['m'].keys() %}
-                    {{ contact_list[myid]['nm'] }}
-    {% elif len(room_list[room_id]['m']) == 2 and myid in room_list[room_id]['m'].keys() %}
-        {% set mem_ids = list(room_list[room_id]['m'].keys()) %}
-        {% set tmp = mem_ids.remove(myid) %}
-        {% set target_id = mem_ids[0] %}
-                    {{ contact_list[target_id]['nm'] }}
-    {% else %}
-                    [UNKNOWN CHAT ROOM]
-    {% end %}
-                </h3>
-{% end %}
-
+                {% include "subtitle.html" %}
                 <div class="main">
 {% block main %}
 {% end %}

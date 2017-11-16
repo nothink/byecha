@@ -10,6 +10,7 @@ import time
 import random
 import base64
 import urllib.parse
+import shutil
 
 import requests
 from requests.exceptions import ConnectionError, ReadTimeout
@@ -53,7 +54,9 @@ class ByeCha(object):
         # initialize
         self._init_load()
 
-        # TODO get avatar icons
+        # get avatar icons and room icons
+        self.fetch_avatars()
+        self.fetch_room_icons()
 
     def fetch_all_chat(self, room_id):
         '''
@@ -67,6 +70,7 @@ class ByeCha(object):
         while True:
             tmp_list = self._load_old_chat(room_id, first_id)
             self.fetch_files(tmp_list)
+            self.fetch_previews(tmp_list)
 
             if first_id == 0:
                 fname = str(room_id) + '_last.json'
@@ -92,6 +96,41 @@ class ByeCha(object):
             for file_id in file_id_all:
                 self._download_file(file_id)
                 self._wait_interval()
+
+    def fetch_previews(self, chat_list):
+        for chat in chat_list:
+            file_id_all = re.findall(r"\[preview id=(\d*) ht=(\d*)\]",
+                                     chat['msg'])
+            for file_id in file_id_all:
+                self._download_preview(file_id)
+                self._wait_interval()
+
+    def fetch_avatars(self):
+        for aid in self.contact_dat:
+            if 'av' in self.contact_dat[aid]:
+                av = self.contact_dat[aid]['av']
+                url = AVATAR_BASE_URL + av
+                file_path = os.path.join(self.root, AVATAR_PATH, av)
+                self._download_image(url, file_path)
+
+    def fetch_room_icons(self):
+        for room_id in self.room_dat:
+            if 'ic' in self.room_dat[room_id]:
+                ic = self.room_dat[room_id]['ic']
+                if not isinstance(ic, str):
+                    continue
+                url = ICON_BASE_URL + ic
+                file_path = os.path.join(self.root, ICON_PATH, ic)
+                self._download_image(url, file_path)
+
+    def _download_image(self, url, file_path):
+        if not os.path.exists(os.path.dirname(file_path)):
+            os.makedirs(os.path.dirname(file_path))
+        res = requests.get(url, stream=True)
+        if res.status_code == 200:
+            with open(file_path, 'wb') as f:
+                res.raw.decode_content = True
+                shutil.copyfileobj(res.raw, f)
 
     def _init_load(self):
         '''
@@ -152,24 +191,6 @@ class ByeCha(object):
         '''
         request 'download_file' command to get file info
         '''
-        def _dig_up_filename(contents):
-            filename_all = re.findall(r"attachment;filename\*=UTF-8''(.+)",
-                                      contents)
-            filename_old_all = re.findall(r"filename=\"=\?UTF-8\?B\?(.+)\?=\"",
-                                          contents)
-            if len(filename_all) > 0:
-                filename = urllib.parse.unquote(filename_all[0])
-            elif len(filename_old_all) > 0:
-                filename = base64.b64decode(filename_old_all[0])
-            else:
-                raise Exception(contents)
-            # if filename is instance of bytes
-            if isinstance(filename, bytes):
-                filename = filename.decode('utf-8')
-            elif not isinstance(filename, str):
-                raise Exception(filename)
-            return filename
-
         param = {
            'cmd': 'download_file',
            'bin': '1',
@@ -181,15 +202,55 @@ class ByeCha(object):
             # TODO must logging!
             print('None Content-disposition headers: ' + str(file_id))
             return
-        filename = _dig_up_filename(res.headers['Content-disposition'])
+        filename = self._dig_up_filename(res.headers['Content-disposition'])
 
-        output_dir = os.path.join(self.root, 'file', str(file_id))
+        output_dir = os.path.join(self.root, FILE_PATH, str(file_id))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         fpath = os.path.join(output_dir, filename)
         with open(fpath, 'wb') as f:
             for chunk in res.iter_content(chunk_size=128):
                 f.write(chunk)
+
+    def _download_preview(self, file_id):
+        param = {
+           'cmd': 'preview_file',
+           'bin': '1',
+           'file_id': str(file_id),
+        }
+        res = self._get_from_gateway(param)
+
+        if 'Content-disposition' not in res.headers:
+            # TODO must logging!
+            print('None Content-disposition headers: ' + str(file_id))
+            return
+        filename = self._dig_up_filename(res.headers['Content-disposition'])
+
+        output_dir = os.path.join(self.root, THUMB_PATH, str(file_id))
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        fpath = os.path.join(output_dir, filename)
+        with open(fpath, 'wb') as f:
+            for chunk in res.iter_content(chunk_size=128):
+                f.write(chunk)
+
+    def _dig_up_filename(self, contents):
+        filename_all = re.findall(r"attachment;filename\*=UTF-8''(.+)",
+                                  contents)
+        filename_old_all = re.findall(r"filename=\"=\?UTF-8\?B\?(.+)\?=\"",
+                                      contents)
+        if len(filename_all) > 0:
+            filename = urllib.parse.unquote(filename_all[0])
+        elif len(filename_old_all) > 0:
+            filename = base64.b64decode(filename_old_all[0])
+        else:
+            raise Exception(contents)
+        # if filename is instance of bytes
+        if isinstance(filename, bytes):
+            filename = filename.decode('utf-8')
+        elif not isinstance(filename, str):
+            raise Exception(filename)
+        return filename
 
     def _get_from_gateway(self, param):
         '''

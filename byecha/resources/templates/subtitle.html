@@ -1,0 +1,32 @@
+{% if room_id in room_list %}
+                <h3>
+    {% if 'n' in room_list[room_id] %}
+                    {{ room_list[room_id]['n'] }}
+    {% elif len(room_list[room_id]['m']) == 1 and myid in room_list[room_id]['m'].keys() %}
+                    {{ contact_list[myid]['nm'] }}
+    {% elif len(room_list[room_id]['m']) == 2 and myid in room_list[room_id]['m'].keys() %}
+        {% set mem_ids = list(room_list[room_id]['m'].keys()) %}
+        {% set tmp = mem_ids.remove(myid) %}
+        {% set target_id = mem_ids[0] %}
+                    {{ contact_list[target_id]['nm'] }}
+    {% else %}
+                    [UNKNOWN CHAT ROOM]
+    {% end %}
+                </h3>
+                <div class="navigator">
+
+        {% if not next_offset %}
+                    [先頭]
+        {% else %}
+                    <a href="/{{ room_id }}/{{ next_offset }}">< 以前</a>
+        {% end %}
+                     |
+        {% if not offset %}
+                    [最終]
+        {% elif not prev_offset %}
+                    <a href="/{{ room_id }}">以降 ></a>
+        {% else %}
+                    <a href="/{{ room_id }}/{{ prev_offset }}">以降 ></a>
+        {% end %}
+                </div>
+{% end %}

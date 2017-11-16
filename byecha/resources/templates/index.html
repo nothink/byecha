@@ -9,45 +9,31 @@
     {% set aid_pre = None %}
     {% for chat in chat_list %}
         {% if chat['aid'] != aid_pre %}
-
             {% if aid_pre and chat['aid'] != aid_pre %}
     </div>
 </div>
             {% end %}
-
 <div class="flexbox">
-
             {% if str(chat['aid']) in contact_list %}
-
-
     <div class="iconflex"><img src="https://appdata.chatwork.com/avatar/{{ contact_list[str(chat['aid'])]['av'] }}" width="36" height="36" /></div>
     <div class="chatflex">
         <h4>{{ contact_list[str(chat['aid'])]['nm'] }}</h4>
-
             {% else %}
-
     <div class="iconflex"><img src="{{ static_url("images/avatar/ico_default.png") }}" width="36" height="36" /></div>
     <div class="chatflex">
         <h4>コンタクトなし (ID: {{ chat['aid'] }})</h4>
-
             {% end %}
-
             {% set aid_pre = chat['aid'] %}
         <div class="chat_time">{{ time.strftime('%-m月%-d日 %H:%M:%S', time.localtime(int(chat['tm']))) }}</div>
         {% else %}
         <div class="chat_time">{{ time.strftime('%H:%M:%S', time.localtime(int(chat['tm']))) }}</div>
         {% end %}
-
         {% block chat %}
             {% include "chat.html" %}
         {% end %}
-
     {% end %}
-
     </div>
 </div>
-
-
 {% end %}
 
 {% end %}
