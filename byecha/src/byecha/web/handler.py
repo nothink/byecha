@@ -81,7 +81,8 @@ class FileHandler(RequestHandler):
         self.set_header('Content-Length', os.path.getsize(filepath))
         if self.mode == 'file':
             self.set_header('Content-disposition',
-                            'attachment;filename*=UTF-8''' + quote(filename))
+                            'attachment;filename*=UTF-8\'\'' + quote(filename))
+
         with open(filepath, 'rb') as f:
             self.write(f.read())
         self.finish()

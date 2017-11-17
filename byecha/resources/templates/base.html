@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>ByeCha</title>
-    <link rel="stylesheet" href="{{ static_url("css/byecha.css") }}"/>
-    <link rel="shortcut icon" id="_favicon" href="{{ static_url("images/favicon.ico") }}" type="image/vnd.microsoft.icon">
+    <link rel="stylesheet" href="{{ static_url('css/byecha.css') }}" />
+    <link rel="shortcut icon" id="_favicon" href="{{ static_url('images/favicon.ico') }}" type="image/vnd.microsoft.icon" />
 </head>
 <body>
     <div class="container">
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="mainbase">
-                {% include "subtitle.html" %}
+{% include "subtitle.html" %}
                 <div class="main">
 {% block main %}
 {% end %}

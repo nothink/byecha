@@ -15,11 +15,11 @@
             {% end %}
 <div class="flexbox">
             {% if str(chat['aid']) in contact_list %}
-    <div class="iconflex"><img src="https://appdata.chatwork.com/avatar/{{ contact_list[str(chat['aid'])]['av'] }}" width="36" height="36" /></div>
+    <div class="iconflex"><img src="{{ static_url('images/avatar/' + contact_list[str(chat['aid'])]['av']) }}" width="36" height="36" /></div>
     <div class="chatflex">
         <h4>{{ contact_list[str(chat['aid'])]['nm'] }}</h4>
             {% else %}
-    <div class="iconflex"><img src="{{ static_url("images/avatar/ico_default.png") }}" width="36" height="36" /></div>
+    <div class="iconflex"><img src="{{ static_url('images/avatar/ico_default.png') }}" width="36" height="36" /></div>
     <div class="chatflex">
         <h4>コンタクトなし (ID: {{ chat['aid'] }})</h4>
             {% end %}

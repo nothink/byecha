@@ -16,7 +16,9 @@ class Chat(object):
     def _get_avatar(self, aid):
         if aid in self._contact_list:
             av = self._contact_list[aid]['av']
-            img_url = AVATAR_BASE_URL + av
+            img_url = os.path.join(STATIC_BASE,
+                                   AVATAR_PATH,
+                                   av)
         else:
             img_url = os.path.join(STATIC_BASE,
                                    AVATAR_PATH,
@@ -41,6 +43,8 @@ class Chat(object):
             tmp_html = self._render_info(tmp_html)
             tmp_html = self._render_deleted(tmp_html)
             tmp_html = self._render_sytem_message(tmp_html)
+            tmp_html = self._render_previews(tmp_html)
+            tmp_html = self._render_downloads(tmp_html)
             self._html = tmp_html
         return self._html
 
@@ -144,7 +148,7 @@ class Chat(object):
         regex = r"\[qt\]\[qtmeta aid=(\d*)\]"
         match = re.findall(regex, tmp_str)
         for m in match:
-            aid = str(m[0])
+            aid = str(m)
             if aid in quote_list:
                 continue
 
@@ -211,23 +215,51 @@ class Chat(object):
             dtext_list.append(dtext_key)
         return tmp_str
 
-    def _render_thumbnail(self, src):
+    def _render_previews(self, src):
         tmp_str = src
-        pid_list = []
+        thumb_list = []
         regex = r"\[preview id=(\d*) ht=(\d*)\]"
         match = re.findall(regex, tmp_str)
         for m in match:
-            pid = str(m[0])
+            thumb_id = str(m[0])
             height = str(m[1])
-            if pid in pid_list:
+            if thumb_id in thumb_list:
                 continue
-            elif dtext_key not in DTEXT_DICT or not DTEXT_DICT[dtext_key]:
-                sys_msg = '<span style="color: red;">[不明なシステムメッセージ: '
-                sys_msg += dtext_key
-                sys_msg += ']</span>'
-            else:
-                sys_msg = DTEXT_DICT[dtext_key]
-            tmp_str = tmp_str.replace('[dtext:' + dtext_key + ']', sys_msg)
 
-            pid_list.append(dtext_key)
+            q_str = '<div class="preview"><img src="/thumb/'
+            q_str += thumb_id
+            q_str += '" height="' + height + '" /></div>'
+
+            tmp_str = tmp_str.replace('[preview id=' + thumb_id +
+                                      ' ht=' + height + ']', q_str)
+
+            thumb_list.append(thumb_id)
         return tmp_str
+
+    def _render_downloads(self, src):
+        tmp_str = src
+        tmp_str = self._render_download_pre(tmp_str)
+        tmp_str = self._render_download_post(tmp_str)
+        return tmp_str
+
+    def _render_download_pre(self, src):
+        tmp_str = src
+        file_list = []
+        regex = r"\[download:(\d*)\]"
+        match = re.findall(regex, tmp_str)
+        for m in match:
+            file_id = str(m)
+            if file_id in file_list:
+                continue
+
+            q_str = '<div class="download"><a href="/file/'
+            q_str += file_id
+            q_str += '">'
+
+            tmp_str = tmp_str.replace('[download:' + file_id + ']', q_str)
+
+            file_list.append(file_id)
+        return tmp_str
+
+    def _render_download_post(self, src):
+        return src.replace('[/download]', '</a></div>')

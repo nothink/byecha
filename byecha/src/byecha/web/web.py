@@ -38,8 +38,10 @@ class WebProcess(Process):
         '''
         app = Application(
             [
-                (r'/file/([0-9]+)', FileHandler, dict(root=self.root, mode='file')),
-                (r'/thumb/([0-9]+)', FileHandler, dict(root=self.root, mode='thumb')),
+                (r'/file/([0-9]+)',
+                 FileHandler, dict(root=self.root, mode='file')),
+                (r'/thumb/([0-9]+)',
+                 FileHandler, dict(root=self.root, mode='thumb')),
                 (r'.*', WebHandler, dict(storage=self.storage)),
             ],
             template_path=os.path.join(self.root, TEMPLATE_PATH),

@@ -345,3 +345,21 @@ blockquote>.quote {
 .deleted {
     color: #999999;
 }
+
+.preview {
+    margin: 0;
+    padding: 2px;
+}
+
+.download {
+    background-color: #F1F2F3;
+    background-image: url("../images/download_icon.png");
+    background-position: 6px center;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    border-color: #B6B7B8;
+    border-style: none none dotted none;
+    border-width: thin;
+    margin: 0 0 4px 0;
+    padding: 2px 2px 2px 32px;
+}
