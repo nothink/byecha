@@ -1,12 +1,11 @@
 INFO = dict(
-    name='ByeCha',
+    name='byecha',
     description='Log dumper of Chatwork, inspired by goodbye_chatwork',
     author='nothink',
-    author_email='nothing@miobox.jp',
+    author_email='nothing@yasagure.jp',
     license='MIT License',
-    url='https://github.com/nothink/ByeCha',
+    url='https://github.com/nothink/byecha',
     classifiers=[
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Development Status :: 4 - Beta',
