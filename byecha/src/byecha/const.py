@@ -7,6 +7,9 @@ GATEWAY_URL = BASE_URL + '/gateway.php'
 AVATAR_BASE_URL = 'https://appdata.chatwork.com/avatar/'
 ICON_BASE_URL = 'https://appdata.chatwork.com/icon/'
 
+API_ENDPOINT_URL = 'https://api.chatwork.com/v2'
+TOKEN_PUBLUSHER_URL = 'https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php'
+
 # connection interval and max length settings
 MAX_CHAT_SIZE = 40
 MAX_RETRY_CNT = 5

@@ -41,7 +41,7 @@ class ByeCha(object):
         # TODO when status code is 302
         token_all = re.findall(r"var ACCESS_TOKEN *= *'(.+)';", res.text)
         if not token_all or len(token_all) <= 0:
-            raise LookupError('ACCESS_TOKEN')
+            raise LookupError('ACCESS_TOKEN (maybe, login error)')
         self.token = token_all[0]
 
         myid_all = re.findall(r"var MYID *= *'(.+)';", res.text)
@@ -200,7 +200,7 @@ class ByeCha(object):
 
         if 'Content-disposition' not in res.headers:
             # TODO must logging!
-            print('None Content-disposition headers: ' + str(file_id))
+            print('Missing "Content-disposition" header: ' + str(file_id))
             return
         filename = self._dig_up_filename(res.headers['Content-disposition'])
 
