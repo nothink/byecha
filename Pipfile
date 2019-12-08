@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-certifi = "==2017.11.5"
-chardet = "==3.0.4"
-idna = "==2.6"
-requests = "==2.20.1"
-tornado = "==4.5.2"
-"urllib3" = "==1.22"
+certifi = ">=2017.11.5"
+chardet = ">=3.0.4"
+idna = ">=2.6"
+requests = ">=2.20.1"
+tornado = ">=4.5.2"
+"urllib3" = ">=1.23"
 
 [dev-packages]
 
